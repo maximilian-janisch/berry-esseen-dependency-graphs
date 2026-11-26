@@ -1,0 +1,69 @@
+During my PhD, Thomas Lehéricy and I studied normal approximation for sums
+of random variables with a dependency graph.
+In our paper~\cite[Lemma~5.1]{JL}, we sharpened a cumulant
+estimate that my advisor, Ashkan Nikeghbali, had developed with Valentin
+Féray and Pierre-Loïc Méliot in their work on mod-$\phi$
+convergence~\cite[Theorem~9.8]{FMN}. This gave us bounds on the Kolmogorov
+distance between the standardized sum and the standard normal distribution.
+For some ranges of the maximum degree $D$, our bounds improved on the
+Berry--Esseen bound of Chen and Shao~\cite[Theorem~2.7]{ChenShao}.
+For bounded summands our Fourier argument gave an essentially optimal
+estimate. With only a moment of order $2<\delta\le 3$, it gave a slower
+rate~\cite[Theorems~2.1 and~2.4 and Section~4]{JL}.
+
+A simple example motivated our conjecture. Suppose the graph consists of
+disjoint cliques of size $D+1$, with identical summands in each clique.
+Distinct cliques are independent by the definition of a dependency graph.
+After grouping, $N$ summands give just $N/(D+1)$ independent terms. We
+conjectured that the Berry--Esseen estimate for independent random variables
+would still hold for every dependency graph of maximum degree $D$, with
+$N/(D+1)$ in place of $N$ in the rate~\cite[Conjecture~1.4]{JL}.
+
+Martin Raič had already conjectured the case $\delta=3$ in
+2003~\cite[Conjecture~5.4]{Raic}. Just before stating his conjecture, he
+suggested that the induction used in the independent case might also work
+for local dependence. For $m$-dependent sequences, Shergin had proved the
+corresponding moment bound in 1979~\cite[Theorem~2]{Shergin}. For general
+dependency graphs, Cai, Shao and Zhang~\cite[Theorem~3.1]{CSZ} recently
+obtained a bound under a fourth-moment assumption.
+
+I finished my PhD without a proof of the conjecture. As AI models improved,
+I kept giving them the problem. I first obtained a complete proof with
+OpenAI's GPT-6.2~Astra in November 2026. The complete Lean~4 formalization
+and instructions for checking the proof are included in the arXiv ancillary files.
+
+The proof gives a stronger result. Let $W=\sum_i X_i$ have variance one,
+where the $X_i$ are centered and square-integrable and have a dependency
+graph of maximum degree $D$. Write $q=D+1$, let $Z$ be standard normal,
+and denote Kolmogorov distance by $\dK$. Then
+\[
+ \dK(W,Z)\le 250{,}000\,q\sum_i
+ \E\!\left[X_i^2\min\{1,q|X_i|\}\right].
+\]
+At $q=1$ this recovers the truncated-moment form of Osipov's inequality
+for independent summands~\cite{Osipov}. Since $t^2\min\{1,t\}\le t^\delta$
+for every $t\ge0$ and $2<\delta\le3$, the same constant gives
+$\dK(W,Z)\le 250{,}000\,q^{\delta-1}\sum_i\E|X_i|^\delta$ throughout
+the conjectured range. Theorem~\ref{thm:published} states the result in
+the notation of our original conjecture.
+
+\paragraph{Idea of the proof.}
+We use Stein's method~\cite{Stein72} and induct on the number of summands,
+as in the independent case~\cite{Bolthausen,Raic}. Smoothing the indicator
+of a half-line in Stein's equation gives a sum over adjacent pairs
+$(i,j)$, including $i=j$. Each term asks whether $W$ lies in a short
+interval. The difficulty is that its width depends on all the summands
+in the neighborhoods of $i$ and $j$. Chen and Shao estimated interval
+probabilities under local dependence by concentration inequalities~\cite[Section~3]{ChenShao}.
+
+Lemma~\ref{lem:charge} is the step that makes induction possible.
+Its proof uses the fact that neighbors carrying at least half the average
+weight in a closed neighborhood account for at least half its total weight.
+After summing over pairs, the lemma gives intervals whose
+widths and weights depend only on $X_i$ and $X_j$. The sum tested against
+each interval is now $W_{ij}$, obtained by deleting both closed
+neighborhoods. The dependency graph makes $W_{ij}$ independent of
+$(X_i,X_j)$. We can therefore fix the two endpoint values and use the
+induction hypothesis on the smaller graph to estimate the interval
+probability. Each vertex belongs to at most $q$ closed neighborhoods.
+Summing the resulting estimates gives the truncated moment above.
